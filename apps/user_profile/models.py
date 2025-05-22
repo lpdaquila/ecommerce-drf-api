@@ -1,6 +1,10 @@
 from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ValidationError
+
+import re 
+from apps.utils import validate_cpf
 
 class UserProfile(models.Model):
     """
@@ -13,7 +17,7 @@ class UserProfile(models.Model):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField()
-    document = models.CharField(max_length=20, unique=True)
+    document = models.CharField(max_length=11)
     
     @property
     def age(self):
@@ -21,9 +25,19 @@ class UserProfile(models.Model):
         age = today.year - self.birth_date.year - \
             ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
         return age
+    
+    def clean(self):
+        error_messages = {}
+        
+        if not validate_cpf(self.document):
+            error_messages['document'] = 'Invalid CPF'
+            
+        if error_messages:
+            raise ValidationError(error_messages)
 
     def __str__(self):
-        return f'{self.user.username} - {self.age}'
+        return self.user.username
+        # return f'{self.user.first_name} {self.user.last_name}'
 
 class UserAddress(models.Model):
     """
@@ -65,6 +79,7 @@ class UserAddress(models.Model):
                 ('SE', 'Sergipe'),
                 ('TO', 'Tocantins'),
     """
+        
     address_name = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=255)
@@ -105,6 +120,21 @@ class UserAddress(models.Model):
             ('TO', 'Tocantins')
         ]
     )
+    
+    class Meta:
+        # Need to add verbose_name and verbose_name_plural
+        # to make the admin interface more user-friendly
+        verbose_name = 'User Address'
+        verbose_name_plural = 'User Addresses'
+        
+    def clean(self):
+        error_messages = {}
+        
+        if not re.match(r'^\d{5}-\d{3}$', self.zip_code):
+            error_messages['zip_code'] = 'Invalid ZIP code format. Use XXXXX-XXX.'
+            
+        if error_messages:
+            raise ValidationError(error_messages)
 
     def __str__(self):
         return f'{self.address}, {self.number} - {self.city}/{self.state}'

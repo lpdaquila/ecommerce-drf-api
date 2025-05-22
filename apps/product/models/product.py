@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 from apps.utils import resize_image
 
 class Product(models.Model):
@@ -25,7 +26,7 @@ class Product(models.Model):
         blank=True, 
         null=True
     ) #TODO: remove blank and null for production
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     marketing_price = models.FloatField()
     marketing_promotional_price = models.FloatField(default=0.0)
     product_type = models.CharField(
@@ -37,7 +38,17 @@ class Product(models.Model):
         default='S'
     )
     
+    def get_price(self):
+        return f'{self.marketing_price:.2f} BRL'
+    get_price.short_description = 'Price' # type: ignore
+    
+    def get_promotional_price(self):
+        return f'{self.marketing_promotional_price:.2f} BRL'
+    get_promotional_price.short_description = 'Promo Price' # type: ignore
+    
     def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = f'{slugify(self.name)}'
         super().save(*args, **kwargs)
         
         max_image_size = 800
@@ -47,7 +58,7 @@ class Product(models.Model):
     
     def __str__(self) -> str:
         return self.name
-
+    
 class Variation(models.Model):
     """ Variation:
                 name - char
@@ -65,4 +76,3 @@ class Variation(models.Model):
     
     def __str__(self) -> str:
         return self.name or self.product.name
-    
