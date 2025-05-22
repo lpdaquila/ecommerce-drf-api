@@ -1,2 +1,2 @@
 from .product import *
-from .prices import *
+from .price import *

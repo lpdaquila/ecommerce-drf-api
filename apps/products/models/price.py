@@ -1,5 +1,5 @@
 from django.db import models
-from apps.product.models.product import Product
+from apps.products.models.product import Product
 
 class PriceType(models.Model):
     name = models.CharField(max_length=50, unique=True)
