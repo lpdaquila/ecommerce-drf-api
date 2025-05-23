@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-from apps.utils import resize_image
+from apps.utils import resize_image, format_price
 
 class Product(models.Model):
     """
@@ -39,11 +39,11 @@ class Product(models.Model):
     )
     
     def get_price(self):
-        return f'{self.marketing_price:.2f} BRL'
+        return format_price(self.marketing_price)
     get_price.short_description = 'Price' # type: ignore
     
     def get_promotional_price(self):
-        return f'{self.marketing_promotional_price:.2f} BRL'
+        return format_price(self.marketing_promotional_price)
     get_promotional_price.short_description = 'Promo Price' # type: ignore
     
     def save(self, *args, **kwargs):
