@@ -6,7 +6,7 @@ app_name = 'product'
 urlpatterns = [
     # Cart
     path('checkout/', views.Checkout.as_view(), name='checkout'),
-    path('addcart/', views.AddCart.as_view(), name='addcart'),
+    path('addtocart/', views.AddToCart.as_view(), name='addtocart'),
     path('removecart/', views.RemoveCart.as_view(), name='removecart'),
     path('cart/', views.Cart.as_view(), name='cart'),
     # Products

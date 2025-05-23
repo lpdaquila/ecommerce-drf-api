@@ -40,7 +40,7 @@ class Product(models.Model):
     
     def get_price(self):
         return format_price(self.marketing_price)
-    get_price.short_description = 'Price' # type: ignore
+    get_price.short_description = 'Product Price' # type: ignore
     
     def get_promotional_price(self):
         return format_price(self.marketing_promotional_price)
