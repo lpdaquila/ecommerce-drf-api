@@ -1,7 +1,7 @@
 from datetime import date
 from django.db import models
-from django.contrib.auth.models import User
 from django.forms import ValidationError
+from apps.users.models.user import User
 
 from apps.utils import validate_cpf
 
@@ -35,7 +35,7 @@ class UserProfile(models.Model):
             raise ValidationError(error_messages)
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
         # return f'{self.user.first_name} {self.user.last_name}'
 
 
