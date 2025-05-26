@@ -5,3 +5,5 @@ from .models.address import UserAddress
 
 admin.site.register(UserProfile)
 admin.site.register(UserAddress)
+
+

@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'apps.users',
 ]
 
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     
