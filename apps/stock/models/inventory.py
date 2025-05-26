@@ -1,20 +1,16 @@
 from django.db import models
-from apps.products.models.product import Product, Variation
+from apps.products.models.product import Variation
 
 class Stock(models.Model):
     """
     Stock:
-        product - FK Product
         variation - FK Variation
         quantity - Int
         min_quantity - Int
         max_quantity - Int
     """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     variation = models.ForeignKey(
         Variation, 
-        blank=True,
-        null=True,
         on_delete=models.CASCADE
     )
     quantity = models.PositiveIntegerField()
@@ -22,4 +18,4 @@ class Stock(models.Model):
     max_quantity = models.PositiveIntegerField()
 
     def __str__(self):
-        return f'{self.product.name} - {self.quantity}'
+        return f'{self.variation.name} - {self.quantity}'

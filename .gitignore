@@ -97,7 +97,8 @@ celerybeat-schedule.*
 # SageMath parsed files 
 *.sage.py 
 
-# Environments 
+# Environments
+.env.*
 .env 
 .venv 
 env/ 
@@ -137,5 +138,7 @@ GitHub.sublime-settings
 # !.vscode/extensions.json 
 .history
 
+# Static Files
 static/
 static_base/
+!static_base/custom/
