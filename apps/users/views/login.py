@@ -1,9 +1,11 @@
-from django.shortcuts import render
-from django.views.generic import ListView
-from django.views import View
+from apps.users.views.base import Base
 
-class Login(View):
-    pass
+class Login(Base):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        
+        
 
-class Logout(View):
+class Logout(Base):
     pass
