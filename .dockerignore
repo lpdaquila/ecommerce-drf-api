@@ -1,3 +1,36 @@
-*.db
+# Ambientes virtuais
+.venv/
+env/
+__pycache__/
+
+# Git
 .git/
+.gitignore
+
+# VSCode
 .vscode/
+
+# IDEs
+.idea/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Bases de dados locais
+*.db
+*.sqlite3
+
+# Pytest / Coverage
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Arquivos temporários e caches
+*.log
+*.tmp
+*.swp
+*.bak
+*.pyc
+*.pyo
+*.pyd

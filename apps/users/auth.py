@@ -1,23 +1,34 @@
-# type: ignore
 from rest_framework.exceptions import AuthenticationFailed, APIException
 
 from django.contrib.auth.hashers import check_password, make_password
 
 from apps.users.models import User
+from apps.utils import load_query
+
+def get_user(method: str, email:str, password:str=None) -> User | None: # type: ignore
+    exception_auth = AuthenticationFailed('Incorrect email or password.')
+        
+    query = load_query.load('apps/users/sql/login_user.sql')
+    try:
+        user_exists = User.objects.raw(query, [email]) 
+        user = user_exists[0]
+        if method == "signup":
+            raise APIException('Email already in use!')
+        if not check_password(password, user.password):
+            raise exception_auth    
+            
+        return user
+                
+    except IndexError:
+        if method == "login":
+            raise exception_auth
+        else:
+            pass
 
 class Authentication:
-    def login(self, email:str=None, password:str=None) -> User:
-        exception_auth = AuthenticationFailed('Incorrect email or password.')
+    def login(self, email:str=None, password:str=None) -> User | None: # type: ignore
         
-        user_exists = User.objects.filter(email=email).exists()
-        
-        if not user_exists:
-            raise exception_auth
-        
-        user = User.objects.filter(email=email).first()
-        
-        if not check_password(password, user.password):
-            raise exception_auth
+        user = get_user('login', email, password)
         
         return user
     
@@ -39,8 +50,8 @@ class Authentication:
             raise APIException('Password cannot be empty')
         
         user = User 
-        if user.objects.filter(email=email).exists():
-            raise APIException('Email already in use!')
+
+        get_user('signup', email)
         
         password_hashed = make_password(password)
         

@@ -7,7 +7,6 @@ from apps.users.models.user import GroupPermissions, User, UserGroups
 class Base(APIView):
     def get_user_access(self, user_id) -> dict[str, Any] | None:
         access = {
-            "staff": False,
             "permissions": []
         }
         
