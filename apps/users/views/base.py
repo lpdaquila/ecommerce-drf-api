@@ -5,7 +5,20 @@ from rest_framework.exceptions import APIException
 from apps.users.models.user import GroupPermissions, User, UserGroups
 
 class Base(APIView):
-    def get_user_access(self, user_id) -> dict[str, Any] | None:
+    """
+    Base class for the views extending the "APIView" class
+    """
+    def get_user_access(self, user_id: int) -> dict[str, Any] | None:
+        """
+        Method that queries a user's permissions and returns them in a list of dicts.
+        
+        Args:
+            :user_id (int): The PK of the User
+            
+        Returns:
+            :dict[str, Any]: Returrns a list of dicts containing the permission "id", "label" and "codename"
+            from the GroupPermissions model.
+        """
         access = {
             "permissions": []
         }

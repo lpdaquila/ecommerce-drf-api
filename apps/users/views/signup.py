@@ -10,7 +10,7 @@ class SignUp(Base):
         email = request.data.get('email')
         password = request.data.get('password')
         
-        user = Authentication.signup(self, name=name, email=email, password=password) # type: ignore
+        user = Authentication.signup(self, name=name, email=email, password=password)  # type: ignore
         
         serializer = UserSerializer(user)
         
