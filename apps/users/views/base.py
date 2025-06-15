@@ -2,12 +2,14 @@ from typing import Any
 from rest_framework.views import APIView
 from rest_framework.exceptions import APIException
 
-from apps.users.models.user import GroupPermissions, User, UserGroups
+from apps.users.models.users import GroupPermissions, User, UserGroups
 
 class Base(APIView):
     """
     Base class for the views extending the "APIView" class
     """
+    def get_user(self, user_id: int):...
+    
     def get_user_access(self, user_id: int) -> dict[str, Any] | None:
         """
         Method that queries a user's permissions and returns them in a list of dicts.

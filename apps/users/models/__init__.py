@@ -1,3 +1,3 @@
-from .profile import UserProfile
-from .address import UserAddress
-from .user import User
+from .profile import Profile
+from .address import Address
+from .users import User

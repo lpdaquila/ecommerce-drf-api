@@ -1,9 +1,9 @@
-from django.shortcuts import render
-from django.views.generic import ListView
-from django.views import View
+from rest_framework.views import APIView
 
-class CreateProfile(View):
+from apps.users.views.base import Base
+
+class CreateProfile(Base):
     pass
 
-class UpdateProfile(View):
+class UpdateProfile(APIView):
     pass

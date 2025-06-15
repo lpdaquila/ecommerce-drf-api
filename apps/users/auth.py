@@ -4,47 +4,26 @@ from django.contrib.auth.hashers import check_password, make_password
 
 from apps.users.models import User
 
-def get_user(method: str, email:str, password:str="") -> User | None: 
+def get_user(email:str) -> User | None: 
     """
-    Function that receives a method related to the use 
-    (signup or login), executes the SQL query, and based in the use,
+    Function that executes the SQL query, and
     returns a 'User' object from the data models or 'None'.
     
-    If method is 'login' and the query returns 'None' will throw the 'exception_auth'
-    because the user was not found.
-    
-    If method is 'signup' and the query returns the first result will throw the
-    APIException 'Email already in use' 
-    
     Args:
-        :method (str): ["login" | "signup"] method that will be used to change the flow of data to be returned
         :email (str): User email to be consulted.
-        :password (str) [Optional]: User password to authenticate the user (optional for 'signup' method).
     
     Returns:
         :User (class models): Returns an object of type 'User' from the
-        models class if login has been successfull |
-        :None: If the method is 'signup' and the query returns 'None'.
     """
-    exception_auth = AuthenticationFailed('Incorrect email or password.')
         
     query = """
         SELECT * FROM "users_user" 
-        WHERE "users_user"."email" = %s"""
-    try:
-        user = User.objects.raw(query, [email])[0] # First result
-        if method == "signup":
-            raise APIException('Email already in use!')
-        if not check_password(password, user.password):
-            raise exception_auth    
-            
-        return user
-                
-    except IndexError:
-        if method == "login":
-            raise exception_auth
-        else:
-            pass
+        WHERE "users_user"."email" = %s
+        LIMIT 1"""
+        
+    user = next(iter(User.objects.raw(query, [email])), None)
+    
+    return user 
 
 class Authentication:
     """
@@ -52,21 +31,25 @@ class Authentication:
     
     This class performs the login and signup methods.
     """
+    
     def login(self, email:str, password:str) -> User | None: 
         """
         Logs the user in based on the provided email and password, and returns
         a 'User' object with the data returned from the 'get_user()' function.
         
         Args:
-            :email (str): The given user email
-            :password (str): The given user password
+            :email (str): User email
+            :password (str): User password
             
         Returns:
             :User (class models): Returns an object of type 'User' from the
             models class
         """
         
-        user = get_user('login', email, password)
+        user = get_user(email)
+        
+        if not user or not check_password(password, user.password):
+            raise AuthenticationFailed('Incorrect email or password.')
         
         return user 
     
@@ -100,14 +83,13 @@ class Authentication:
         
         if not password or password == '':
             raise APIException('Password cannot be empty')
-        
-        user = User 
 
-        get_user('signup', email)
+        if get_user(email): # Checks if the email already exists
+            raise APIException('Email already exists')
         
         password_hashed = make_password(password)
         
-        created_user = user.objects.create(
+        created_user = User.objects.create(
             name=name,
             email=email,
             password=password_hashed,

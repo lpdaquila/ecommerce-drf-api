@@ -1,10 +1,10 @@
 import re 
 from django.db import models
 from django.forms import ValidationError
-from apps.users.models.user import User
+from apps.users.models import Profile
 
 
-class UserAddress(models.Model):
+class Address(models.Model):
     """
     UserAddress:
             address_name - char
@@ -46,7 +46,7 @@ class UserAddress(models.Model):
     """
         
     address_name = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     address = models.CharField(max_length=255)
     number = models.CharField(max_length=10)
     complement = models.CharField(max_length=255, blank=True, null=True)
