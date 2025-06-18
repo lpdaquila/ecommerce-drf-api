@@ -18,4 +18,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'name', 'email')
         
+class ProfileSerializer(serializers.ModelSerializer):
+    ...
+    
+class AddressSerializer(serializers.ModelSerializer):
+    ...
+        
         

@@ -1,27 +1,25 @@
-FROM debian:stable-slim
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+FROM alpine AS builder
 
-ENV DEBIAN_FRONTEND=noninteractive
+RUN apk add --no-cache ca-certificates curl tar gzip && \
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+
+FROM debian:stable-slim
 
 RUN apt-get update && \
-    apt-get install -y \
-    curl ca-certificates 
+    apt-get install -y ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
-ADD https://astral.sh/uv/install.sh /uv-installer.sh
-
-RUN sh /uv-installer.sh && rm /uv-installer.sh
-
-ENV PATH="/root/.local/bin/:$PATH"
+COPY --from=builder /root/.local/bin/uv /root/.local/bin/uv
 
 WORKDIR /app
 
-COPY pyproject.toml uv.lock .python-version ./
-
-RUN uv venv && \
-uv pip install -r pyproject.toml
-
 COPY . .
+
+ENV PATH="/root/.local/bin:${PATH}"
 
 EXPOSE 8000
 
-CMD ["bash", "-c", "uv run manage.py runserver 0.0.0.0:8000"]
+RUN uv run manage.py check
+
+CMD ["uv", "run", "manage.py", "runserver", "0.0.0.0:8000"]
+
