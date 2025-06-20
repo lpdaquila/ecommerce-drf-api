@@ -8,15 +8,19 @@ from apps.utils import validate_cpf
 class Profile(models.Model):
     """
     ### UserProfile	
-            user - FK User (or OneToOne)
+            user - OneToOne User
             name - Char
             email - Email
+            phone - Char
+            document - Char
+            date_joined - Date
     """
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, blank=True)
     document = models.CharField(max_length=11, null=True, blank=True, unique=True)
+    date_joined = models.DateTimeField(auto_now_add=True, null=True)
     
     # @property
     # def age(self):
