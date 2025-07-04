@@ -25,6 +25,18 @@ def get_user(email:str) -> User | None:
     
     return user 
 
+def create_user(name: str, email: str, password: str) -> User:
+    password_hashed = make_password(password)
+    
+    created_user = User.objects.create(
+            name=name,
+            email=email,
+            password=password_hashed,
+            staff=False
+        )
+    
+    return created_user
+
 class Authentication:
     """
     Class for user authentication
@@ -58,7 +70,6 @@ class Authentication:
         name: str,
         email: str,
         password: str,
-        staff=False
     ) -> User:
         """
         Registers the user based on the provided data, 
@@ -69,7 +80,6 @@ class Authentication:
             :name (str): [Not Null] The user name
             :email (str): [Not Null] The user email (cannot already be registred)
             :password (str): [Not Null] The user password
-            :staff (bool): [Optional] For future use
             
         Returns:
             :User (class models): Returns an object of type 'User' from models class
@@ -87,13 +97,4 @@ class Authentication:
         if get_user(email): # Checks if the email already exists
             raise APIException('Email already exists')
         
-        password_hashed = make_password(password)
-        
-        created_user = User.objects.create(
-            name=name,
-            email=email,
-            password=password_hashed,
-            staff=False
-        )
-        
-        return created_user
+        return create_user(name, email, password)

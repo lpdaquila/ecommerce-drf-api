@@ -22,16 +22,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     User
         name - Char
-        email - Email
-        document - Char
         data_joined - DateTime
         is_active - True
         is_staff - Bool
     """
     name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20, blank=True)
-    document = models.CharField(max_length=11, unique=True)
     date_joined = models.DateTimeField(auto_now_add=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -39,7 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'document']
+    REQUIRED_FIELDS = ['name']
     
     def __str__(self) -> str:
         return self.email
