@@ -3,33 +3,25 @@ from rest_framework import serializers
 from apps.users.models import User, Profile
 
 class UserSerializer(serializers.ModelSerializer):
-    """
-    Serializers the 'User" model for the API requests data.
-    """
-    phone = serializers.SerializerMethodField()
-    
     class Meta:
-        """
-        Recieves the 'User' model and serialize to "fields"
-        
-        Serialized data:
-            :id: User Primary Key
-            :name: User name
-            :email: User email
-        """
         model = User
-        fields = ('id', 'name', 'email', 'phone', 'document')
-        
-    def get_phone(self, obj):
-        return obj.phone if obj.phone else None
+        fields = ('id', 'name', 'email')
         
 class ProfileSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
     phone = serializers.SerializerMethodField()
     document = serializers.SerializerMethodField()
     
     class Meta:
         model = Profile
         fields = ('id', 'name', 'email', 'phone', 'document')
+        
+    def get_name(self, obj):
+        return obj.user.name if obj.user else obj.guest_name
+    
+    def get_email(self, obj):
+        return obj.user.email if obj.user else obj.guest_email
         
     def get_phone(self, obj):
         return obj.phone if obj.phone else None

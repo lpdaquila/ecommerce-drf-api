@@ -1,10 +1,10 @@
 from apps.users.views.base import Base
-from apps.users.auth import Authentication
+from apps.users.services import Authentication
 from apps.users.serializers import UserSerializer
 
 from rest_framework.response import Response
 
-class SignUp(Base):
+class CreateAccount(Base):
     """Register a new user"""
     def post(self, request):
         """
@@ -29,7 +29,7 @@ class SignUp(Base):
         email = request.data.get('email')
         password = request.data.get('password')
         
-        user = Authentication.signup(self, name=name, email=email, password=password)  # type: ignore
+        user = Authentication.create_account(self, name=name, email=email, password=password)  # type: ignore
         
         serializer = UserSerializer(user)
         

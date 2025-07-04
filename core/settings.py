@@ -59,8 +59,8 @@ INSTALLED_APPS = [
     'corsheaders',
     
     # Project Apps
-    'apps.orders',
-    'apps.products',
+    # 'apps.orders',
+    # 'apps.products',
     'apps.users',
 ]
 

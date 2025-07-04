@@ -1,29 +1,14 @@
+import uuid
+from datetime import timedelta
+
 from rest_framework.exceptions import AuthenticationFailed, APIException
 
+from django.utils import timezone
 from django.contrib.auth.hashers import check_password, make_password
 
-from apps.users.models import User
-
-def get_user(email:str) -> User | None: 
-    """
-    Function that executes the SQL query, and
-    returns a 'User' object from the data models or 'None'.
-    
-    Args:
-        :email (str): User email to be consulted.
-    
-    Returns:
-        :User (class models): Returns an object of type 'User' from the
-    """
-        
-    query = """
-        SELECT * FROM "users_user" 
-        WHERE "users_user"."email" = %s
-        LIMIT 1"""
-        
-    user = next(iter(User.objects.raw(query, [email])), None)
-    
-    return user 
+from apps.utils import generate_expire_time
+from apps.users.models import User, Profile
+from apps.users.selectors import get_user
 
 def create_user(name: str, email: str, password: str) -> User:
     password_hashed = make_password(password)
@@ -32,10 +17,42 @@ def create_user(name: str, email: str, password: str) -> User:
             name=name,
             email=email,
             password=password_hashed,
-            staff=False
+            is_staff=False
         )
     
+    try:
+        existent_profile = Profile.objects.get(guest_email=email)
+        existent_profile.user = created_user
+        existent_profile.guest_name = None
+        existent_profile.guest_email = None
+        existent_profile.guest_public_id = None
+        existent_profile.guest_public_id_expires_at = None
+        existent_profile.save()
+        
+    except Profile.DoesNotExist:
+        Profile.objects.create(user=created_user)
+        
     return created_user
+
+def create_guest_profile(
+    name: str | None, 
+    email: str | None, 
+    document: str = "",
+    phone: str = "",
+    ):
+    
+    generated_expire_time = generate_expire_time(hours=48)
+    
+    created_profile = Profile.objects.create(
+        guest_name=name,
+        guest_email=email,
+        guest_public_id=uuid.uuid4,
+        guest_public_id_expires_at=generated_expire_time,
+        document=document,
+        phone=phone
+    )
+    
+    return created_profile
 
 class Authentication:
     """
@@ -65,7 +82,7 @@ class Authentication:
         
         return user 
     
-    def signup(
+    def create_account(
         self,
         name: str,
         email: str,
