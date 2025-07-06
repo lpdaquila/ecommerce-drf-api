@@ -1,11 +1,9 @@
 import uuid
-from datetime import timedelta
 
 from rest_framework.exceptions import AuthenticationFailed, APIException
-
-from django.utils import timezone
 from django.contrib.auth.hashers import check_password, make_password
 
+from apps.utils.exceptions import EmailAlreadyInUse
 from apps.utils import generate_expire_time
 from apps.users.models import User, Profile
 from apps.users.selectors import get_user
@@ -35,18 +33,20 @@ def create_user(name: str, email: str, password: str) -> User:
     return created_user
 
 def create_guest_profile(
-    name: str | None, 
-    email: str | None, 
+    name: str, 
+    email: str, 
     document: str = "",
     phone: str = "",
     ):
     
     generated_expire_time = generate_expire_time(hours=48)
     
+    generated_uuid = uuid.uuid4()
+    
     created_profile = Profile.objects.create(
         guest_name=name,
         guest_email=email,
-        guest_public_id=uuid.uuid4,
+        guest_public_id=generated_uuid,
         guest_public_id_expires_at=generated_expire_time,
         document=document,
         phone=phone
@@ -112,6 +112,6 @@ class Authentication:
             raise APIException('Password cannot be empty')
 
         if get_user(email): # Checks if the email already exists
-            raise APIException('Email already exists')
+            raise EmailAlreadyInUse
         
         return create_user(name, email, password)

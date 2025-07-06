@@ -1,6 +1,6 @@
 from apps.users.views.base import Base
 from apps.users.services import Authentication
-from apps.users.serializers import UserSerializer
+from apps.users.serializers import ProfileSerializer
 
 from rest_framework.response import Response
 
@@ -31,8 +31,10 @@ class CreateAccount(Base):
         
         user = Authentication.create_account(self, name=name, email=email, password=password)  # type: ignore
         
-        serializer = UserSerializer(user)
+        profile = self.get_user_profile(user_id=user.pk)
+        
+        serializer = ProfileSerializer(profile)
         
         return Response({
-            "user": serializer.data,
+            "profile": serializer.data,
         })

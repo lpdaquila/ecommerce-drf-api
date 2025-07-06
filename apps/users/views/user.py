@@ -1,6 +1,6 @@
 from apps.users.views.base import Base
 from apps.users.models import User
-from apps.users.serializers import UserSerializer
+from apps.users.serializers import ProfileSerializer
 from apps.utils import load_query
 
 from rest_framework.permissions import IsAuthenticated
@@ -35,13 +35,12 @@ class GetUser(Base):
         except IndexError:
             APIException('User does not exists or is inactivated!')
             return
+        
+        profile = self.get_user_profile(user.pk)
             
-        access = self.get_user_access(user)
-            
-        serializer = UserSerializer(user) 
+        serializer = ProfileSerializer(profile)
         
         return Response({
-            "user": serializer.data,
-            "perm": access,
+            "profile": serializer.data
         })  # type: ignore
             

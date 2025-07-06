@@ -7,7 +7,7 @@ class RequiredFields(APIException):
     
 class EmailAlreadyInUse(APIException):
     status_code = 400
-    default_detail = 'Email already in use.'
+    default_detail = 'Email already in use'
     default_code = 'error_email_already_in_use'
     
 class NotFoundProfile(APIException):

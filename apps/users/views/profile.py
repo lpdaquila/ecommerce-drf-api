@@ -10,6 +10,15 @@ from rest_framework.exceptions import APIException
 class GuestProfile(Base):
     permission_classes = [AllowAny]
     
+    """
+    For checkout logic: 
+    
+    put on the api headers the "X-Gst-Token" and in frontend store in localStorage or in a cookie
+    for the uuid token to guest user
+    
+    in checkout view use "HasValidGuestToken" in permission_classes
+    """
+    
     def post(self, request):
         name = request.data.get('name')
         email = request.data.get('email')
@@ -33,23 +42,6 @@ class GuestProfile(Base):
             return Response({"success": True}, status=201)
         
         return Response(new_guest_profile, status=400)
-    
-class GuestProfileDetail(Base):
-    
-    def get_permissions(self):
-        match self.request.method:
-            case 'GET':
-                return [AllowAny]
-            case 'PUT' | 'DELETE':
-                return [IsAuthenticated]
-        return super().get_permissions()
-        
-    def get(self, request, profile_id):
-        profile = self.get_profile(profile_id)
-        
-        serializer = ProfileSerializer(profile)
-        
-        return Response({"profile": serializer.data})
     
 class UserProfile(Base):
     ...

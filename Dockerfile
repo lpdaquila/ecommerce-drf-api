@@ -34,4 +34,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "gunicorn", "--workers=4", "--bind=0.0.0.0:8000", "core.wsgi"]
