@@ -4,7 +4,7 @@ from apps.users.serializers import ProfileSerializer
 
 from rest_framework.response import Response
 
-class CreateAccount(Base):
+class CreateAccountView(Base):
     """Register a new user"""
     def post(self, request):
         """

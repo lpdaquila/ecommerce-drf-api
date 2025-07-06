@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 
-class GetUser(Base):
+class GetUserView(Base):
     """
     Class for check if the user is authenticated
     """

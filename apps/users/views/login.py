@@ -5,7 +5,7 @@ from apps.users.serializers import ProfileSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-class Login(Base):
+class LoginView(Base):
     """Logs the user in"""
     def post(self, request):
         """

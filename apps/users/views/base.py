@@ -20,5 +20,13 @@ class Base(APIView):
             raise NotFoundProfile
         
         return profile
+    
+    def get_profile(self, profile_id):
+        profile = Profile.objects.filter(profile_id=profile_id).first()
+        
+        if not profile:
+            raise NotFoundProfile
+        
+        return profile
         
         

@@ -15,4 +15,9 @@ class NotFoundProfile(APIException):
     default_detail = 'Profile not found'
     default_code = 'profile_not_found'
     
+class UserInactivated(APIException):
+    status_code = 401
+    default_detail = "User is inactivated"
+    default_code = 'error_user_inactivated'
+    
     
