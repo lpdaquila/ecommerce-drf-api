@@ -1,6 +1,6 @@
 from apps.users.views.base import Base
 from apps.users.services import Authentication
-from apps.users.serializers import ProfileSerializer
+from apps.users.serializers import UserProfileSerializer
 
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -31,14 +31,20 @@ class LoginView(Base):
         
         user = Authentication.login(self, email=email, password=password) # type: ignore
         
-        token = RefreshToken.for_user(user) # type: ignore
+        token = RefreshToken.for_user(user)  # type: ignore
         
         profile = self.get_user_profile(user_id=user.pk) # type: ignore
         
-        profile_serializer = ProfileSerializer(profile)
+        serializer = UserProfileSerializer(profile)
+        
+        response = {"user": serializer.data,
+                    "refresh": str(token),
+                    "access": str(token.access_token)}
+        
+        print(response)
         
         return Response({
-            "profile": profile_serializer.data,
+            "user": serializer.data,
             "refresh": str(token),
             "access": str(token.access_token),
         })

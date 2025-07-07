@@ -1,6 +1,6 @@
 from apps.users.views.base import Base
 from apps.users.models import User
-from apps.users.serializers import ProfileSerializer
+from apps.users.serializers import UserProfileSerializer
 from apps.utils import load_query
 
 from rest_framework.permissions import IsAuthenticated
@@ -38,9 +38,9 @@ class GetUserView(Base):
         
         profile = self.get_user_profile(user.pk)
             
-        serializer = ProfileSerializer(profile)
+        serializer = UserProfileSerializer(profile)
         
         return Response({
-            "profile": serializer.data
-        })  # type: ignore
+            "user": serializer.data
+        })   # type: ignore
             

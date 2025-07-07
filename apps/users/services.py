@@ -17,18 +17,8 @@ def create_user(name: str, email: str, password: str) -> User:
             password=password_hashed,
             is_staff=False
         )
-    
-    try:
-        existent_profile = Profile.objects.get(guest_email=email)
-        existent_profile.user = created_user
-        existent_profile.guest_name = None
-        existent_profile.guest_email = None
-        existent_profile.guest_public_id = None
-        existent_profile.guest_public_id_expires_at = None
-        existent_profile.save()
         
-    except Profile.DoesNotExist:
-        Profile.objects.create(user=created_user)
+    Profile.objects.create(user=created_user)
         
     return created_user
 

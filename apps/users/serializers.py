@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
 from apps.users.models import Profile
+from apps.utils.data_parser import document_to_string, phone_to_string
         
-class ProfileSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     
     class Meta:
@@ -10,9 +11,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
         
     def get_name(self, obj):
-        return obj.user.name if obj.user else obj.guest_name
+        return obj.user.name 
     
-class ProfileDetailSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
     document = serializers.SerializerMethodField()
@@ -35,10 +36,10 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
         return obj.user.email
     
     def get_document(self, obj):
-        return obj.document if obj.document else None
+        return document_to_string(obj.document) if obj.document else None
     
     def get_phone(self, obj):
-        return obj.phone if obj.phone else None
+        return phone_to_string(obj.phone) if obj.phone else None
     
 class AddressSerializer(serializers.ModelSerializer):
     ...

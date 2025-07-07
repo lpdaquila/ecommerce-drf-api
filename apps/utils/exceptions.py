@@ -20,4 +20,9 @@ class UserInactivated(APIException):
     default_detail = "User is inactivated"
     default_code = 'error_user_inactivated'
     
+class DocumentAlreadyRegistered(APIException):
+    status_code = 400
+    default_detail = "Document already registered"
+    default_code = 'error_document_already_registered'
+    
     

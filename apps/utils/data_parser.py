@@ -37,3 +37,23 @@ def validate_cpf(cpf):
         return True
     else:
         return False
+    
+def document_to_string(document):
+    parsed = f"{document[:3]}.{document[3:6]}.{document[6:9]}-{document[9:]}"
+    return parsed
+
+def document_to_number(document):
+    return document.replace(".", "").replace("-","").replace("/","")
+
+def phone_to_string(phone):
+    if len(phone) == 11:
+        parsed = "("+phone[:2]+") "+phone[2:7]+"-"+phone[7:]
+    elif len(phone) == 10:
+        parsed = "("+phone[:2]+") "+phone[2:6]+"-"+phone[6:]
+    else:
+        parsed = 'Invalid number len'
+    
+    return parsed
+
+def phone_to_number(phone):
+    return phone.replace("(","").replace(")","").replace("-","").replace(" ","")
