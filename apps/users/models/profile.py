@@ -2,10 +2,7 @@ import uuid
 from datetime import timedelta
 from django.utils import timezone
 from django.db import models
-from django.forms import ValidationError
 from apps.users.models.users import User
-
-from apps.utils import validate_cpf
 
 class Profile(models.Model):
     """
@@ -28,11 +25,6 @@ class Profile(models.Model):
     #     age = today.year - self.birth_date.year - \
     #         ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
     #     return age
-    
-    def clean(self):
-        if self.document:
-            if not validate_cpf(self.document):
-                raise ValidationError("Invalid Document")
             
     def __str__(self):
         return self.user.name
@@ -51,12 +43,12 @@ class AnonymousProfile(models.Model):
     expires_at = models.DateField()
     date_joined = models.DateTimeField(auto_now_add=True, null=True)
         
-def is_valid_token(self) -> bool | None:
-    return timezone.now() < self.guest_public_id_expires_at if self.guest_public_id_expires_at else None
+    def is_valid_token(self) -> bool | None:
+        return timezone.now() < self.expires_at if self.expires_at else None
     
-def renew_token(self, hours: int = 48):
-    self.guest_public_id = uuid.uuid4()
-    self.guest_public_id_expires_at = timezone.now() + timedelta(hours=hours)
-    self.save()
+    def renew_token(self, hours: int = 48):
+        self.public_id = uuid.uuid4()
+        self.expires_at = timezone.now() + timedelta(hours=hours)
+        self.save()
 
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.users.models import Profile
+from apps.users.models import Profile, Address
 from apps.utils.data_parser import document_to_string, phone_to_string
         
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -42,6 +42,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         return phone_to_string(obj.phone) if obj.phone else None
     
 class AddressSerializer(serializers.ModelSerializer):
-    ...
+    class Meta:
+        model = Address
+        fields = (
+            'id',
+            'name',
+            'address',
+            'number',
+            'complement',
+            'district',
+            'zip_code',
+            'city',
+            'state',
+        )
         
         

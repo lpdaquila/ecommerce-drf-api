@@ -15,34 +15,7 @@ class Address(models.Model):
             district - char
             zip_code - Char
             city - char
-            state - Choices
-                ('AC', 'Acre'),
-                ('AL', 'Alagoas'),
-                ('AP', 'Amapá'),
-                ('AM', 'Amazonas'),
-                ('BA', 'Bahia'),
-                ('CE', 'Ceará'),
-                ('DF', 'Distrito Federal'),
-                ('ES', 'Espírito Santo'),
-                ('GO', 'Goiás'),
-                ('MA', 'Maranhão'),
-                ('MT', 'Mato Grosso'),
-                ('MS', 'Mato Grosso do Sul'),
-                ('MG', 'Minas Gerais'),
-                ('PA', 'Pará'),
-                ('PB', 'Paraíba'),
-                ('PR', 'Paraná'),
-                ('PE', 'Pernambuco'),
-                ('PI', 'Piauí'),
-                ('RJ', 'Rio de Janeiro'),
-                ('RN', 'Rio Grande do Norte'),
-                ('RS', 'Rio Grande do Sul'),
-                ('RO', 'Rondônia'),
-                ('RR', 'Roraima'),
-                ('SC', 'Santa Catarina'),
-                ('SP', 'São Paulo'),
-                ('SE', 'Sergipe'),
-                ('TO', 'Tocantins'),
+            state - Char
     """
         
     address_name = models.CharField(max_length=100)
@@ -53,38 +26,7 @@ class Address(models.Model):
     district = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=10)
     city = models.CharField(max_length=100)
-    state = models.CharField(
-        max_length=2,
-        choices=[
-            ('AC', 'Acre'),
-            ('AL', 'Alagoas'),
-            ('AP', 'Amapá'),
-            ('AM', 'Amazonas'),
-            ('BA', 'Bahia'),
-            ('CE', 'Ceará'),
-            ('DF', 'Distrito Federal'),
-            ('ES', 'Espírito Santo'),
-            ('GO', 'Goiás'),
-            ('MA', 'Maranhão'),
-            ('MT', 'Mato Grosso'),
-            ('MS', 'Mato Grosso do Sul'),
-            ('MG', 'Minas Gerais'),
-            ('PA', 'Pará'),
-            ('PB', 'Paraíba'),
-            ('PR', 'Paraná'),
-            ('PE', 'Pernambuco'),
-            ('PI', 'Piauí'),
-            ('RJ', 'Rio de Janeiro'),
-            ('RN', 'Rio Grande do Norte'),
-            ('RS', 'Rio Grande do Sul'),
-            ('RO', 'Rondônia'),
-            ('RR', 'Roraima'),
-            ('SC', 'Santa Catarina'),
-            ('SP', 'São Paulo'),
-            ('SE', 'Sergipe'),
-            ('TO', 'Tocantins')
-        ]
-    )
+    state = models.CharField(max_length=2)
     
     class Meta:
         # Need to add verbose_name and verbose_name_plural

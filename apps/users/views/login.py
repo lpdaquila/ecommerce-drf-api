@@ -1,6 +1,7 @@
 from apps.users.views.base import Base
 from apps.users.services import Authentication
 from apps.users.serializers import UserProfileSerializer
+from apps.users.schemas.user import UserAuthSchema
 
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -26,22 +27,15 @@ class LoginView(Base):
             :Response (rest_framework Response): Returns a dict with user serialized data, user permissions, refresh token and access token
                 
         """
-        email = request.data.get('email')
-        password = request.data.get('password')
+        data = UserAuthSchema(**request.data)
         
-        user = Authentication.login(self, email=email, password=password) # type: ignore
+        user = Authentication.login(self, email=data.email, password=data.password)  # type: ignore
         
         token = RefreshToken.for_user(user)  # type: ignore
         
         profile = self.get_user_profile(user_id=user.pk) # type: ignore
         
         serializer = UserProfileSerializer(profile)
-        
-        response = {"user": serializer.data,
-                    "refresh": str(token),
-                    "access": str(token.access_token)}
-        
-        print(response)
         
         return Response({
             "user": serializer.data,

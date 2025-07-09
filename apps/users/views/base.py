@@ -1,8 +1,10 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework.views import APIView
 from rest_framework.exceptions import APIException
 
 from apps.utils.exceptions import NotFoundProfile
-from apps.users.models import Profile
+from apps.users.models import Profile, Address
 from apps.users.models.users import GroupPermissions, User, UserGroups
 from apps.users.selectors import get_user
 
@@ -26,5 +28,10 @@ class Base(APIView):
             raise NotFoundProfile
         
         return profile
+    
+    def get_user_address(self, profile_id, address_id):
+        address = get_object_or_404(Address, pk=address_id, profile_id=profile_id)
+        
+        return address
         
         

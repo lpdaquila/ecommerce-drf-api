@@ -9,4 +9,6 @@ urlpatterns = [
     path('refresh/', views.TokenRefreshView.as_view(), name='refresh'),
     path('user/', views.GetUserView.as_view(), name='user'),
     path('user/profile/<int:profile_id>', views.ProfileView.as_view(), name='profile'),
+    path('user/address/', views.AddressView.as_view(), name='addresses'),
+    path('user/address/<int:address_id>', views.AddressDetailView.as_view(), name='address'),
 ]

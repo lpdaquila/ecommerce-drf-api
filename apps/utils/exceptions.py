@@ -25,4 +25,20 @@ class DocumentAlreadyRegistered(APIException):
     default_detail = "Document already registered"
     default_code = 'error_document_already_registered'
     
+class InvalidPhone(APIException):
+    status_code = 400
+    default_detail = "Invalid phone format"
+    
+class InvalidDocument(APIException):
+    status_code = 400
+    default_detail = "Invalid document format"
+    
+class InvalidPasswordFormat(APIException):
+    status_code = 400
+    default_detail = "Invalid password format"
+    
+class InvalidZipCodeFormat(APIException):
+    status_code = 400
+    default_detail = "Invalid zip code format, Use XXXXX-XXX pattern"
+    
     
