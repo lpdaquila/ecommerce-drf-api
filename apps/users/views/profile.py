@@ -3,7 +3,10 @@ from apps.users.serializers import ProfileSerializer
 from apps.users.views.base import Base
 from apps.users.models import Profile, User
 from apps.users.schemas.profile import ProfileSchema
+from apps.utils.data_parser import validation_error_detail_msg
 from apps.utils.exceptions import EmailAlreadyInUse, UserInactivated, DocumentAlreadyRegistered
+
+from pydantic import ValidationError
 
 from rest_framework.views import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -64,7 +67,11 @@ class ProfileView(Base):
         })
         
     def put(self, request, profile_id):
-        validated_data = ProfileSchema(**request.data)
+        try:
+            validated_data = ProfileSchema(**request.data)
+        except ValidationError as e:
+            detail = validation_error_detail_msg(e.errors())
+            raise APIException(detail=detail)
         
         profile = self.get_profile(profile_id)
         

@@ -2,8 +2,12 @@ from apps.users.views.base import Base
 from apps.users.services import Authentication
 from apps.users.serializers import UserProfileSerializer
 from apps.users.schemas.user import UserSignupSchema
+from apps.utils.data_parser import validation_error_detail_msg
+
+from pydantic import ValidationError
 
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 
 class CreateAccountView(Base):
     """Register a new user"""
@@ -26,7 +30,11 @@ class CreateAccountView(Base):
         Returns:
             :Response (rest_framework Response): Returns a dict with user serialized data.
         """
-        data = UserSignupSchema(**request.data)
+        try:
+            data = UserSignupSchema(**request.data)
+        except ValidationError as e:
+            detail = validation_error_detail_msg(e.errors())
+            raise APIException(detail=detail)
         
         user = Authentication.create_account(self, name=data.name, email=data.email, password=data.password) # type: ignore
         

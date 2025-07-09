@@ -1,9 +1,14 @@
 from apps.users.models import Address, Profile
 from apps.users.serializers import AddressSerializer
 from apps.users.views.base import Base
+from apps.users.schemas.address import AddressSchema
+from apps.utils.data_parser import validation_error_detail_msg
+
+from pydantic import ValidationError 
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 
 class AddressView(Base):
     permission_classes = [IsAuthenticated]
@@ -20,27 +25,24 @@ class AddressView(Base):
         })
     
     def post(self, request):
-        address_name = request.data.get('address_name')
-        address = request.data.get('address')
-        number = request.data.get('number')
-        complement = request.data.get('complement')
-        district = request.data.get('district')
-        zip_code = request.data.get('zip_code')
-        city = request.data.get('city')
-        state = request.data.get('state')
+        try:
+            validated_data = AddressSchema(**request.data)
+        except ValidationError as e:
+            detail = validation_error_detail_msg(e.errors())
+            raise APIException(detail=detail)
         
         profile = self.get_profile(request.user.id)
         
         created_addr = Address.objects.create(
             profile_id=profile.pk,
-            address_name=address_name,
-            address=address,
-            number=number,
-            complement=complement,
-            district=district,
-            zip_code=zip_code,
-            city=city,
-            state=state
+            address_name=validated_data.address_name,
+            address=validated_data.address,
+            number=validated_data.number,
+            complement=validated_data.complement,
+            district=validated_data.district,
+            zip_code=validated_data.zip_code,
+            city=validated_data.city,
+            state=validated_data.state
         )
         
         if isinstance(created_addr, Address):
@@ -52,7 +54,7 @@ class AddressDetailView(Base):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, address_id):
-        profile = self.get_user_profile(request.user.id)
+        profile = self.get_profile(request.user.id)
         
         address = self.get_user_address(profile_id=profile.id, address_id=address_id) # type: ignore
         
@@ -61,34 +63,31 @@ class AddressDetailView(Base):
         return Response({"address": serializer.data})
     
     def put(self, request, address_id):
-        address_name = request.data.get('address_name')
-        address = request.data.get('address')
-        number = request.data.get('number')
-        complement = request.data.get('complement')
-        district = request.data.get('district')
-        zip_code = request.data.get('zip_code')
-        city = request.data.get('city')
-        state = request.data.get('state')
+        try:
+            validated_data = AddressSchema(**request.data)
+        except ValidationError as e:
+            detail = validation_error_detail_msg(e.errors())
+            raise APIException(detail=detail)
         
-        profile = self.get_user_profile(request.user.id)
+        profile = self.get_profile(request.user.id)
         
         address = self.get_user_address(profile_id=profile.pk, address_id=address_id)
         
         Address.objects.filter(id=address.pk).update(
-            address_name=address_name,
-            address=address,
-            number=number,
-            complement=complement,
-            district=district,
-            zip_code=zip_code,
-            city=city,
-            state=state
+            address_name=validated_data.address_name,
+            address=validated_data.address,
+            number=validated_data.number,
+            complement=validated_data.complement,
+            district=validated_data.district,
+            zip_code=validated_data.zip_code,
+            city=validated_data.city,
+            state=validated_data.state
         )
         
         return Response({"success": True})
     
     def delete(self, request, address_id):
-        profile = self.get_user_profile(request.user.id)
+        profile = self.get_profile(request.user.id)
         
         address = self.get_user_address(profile_id=profile.pk, address_id=address_id)
         

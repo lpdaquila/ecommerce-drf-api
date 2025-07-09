@@ -2,8 +2,12 @@ from apps.users.views.base import Base
 from apps.users.services import Authentication
 from apps.users.serializers import UserProfileSerializer
 from apps.users.schemas.user import UserAuthSchema
+from apps.utils.data_parser import validation_error_detail_msg
+
+from pydantic import ValidationError
 
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class LoginView(Base):
@@ -27,7 +31,11 @@ class LoginView(Base):
             :Response (rest_framework Response): Returns a dict with user serialized data, user permissions, refresh token and access token
                 
         """
-        data = UserAuthSchema(**request.data)
+        try:
+            data = UserAuthSchema(**request.data)
+        except ValidationError as e:
+            detail = validation_error_detail_msg(e.errors())
+            raise APIException(detail=detail)
         
         user = Authentication.login(self, email=data.email, password=data.password)  # type: ignore
         

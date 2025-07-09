@@ -7,7 +7,7 @@ class AddressSchema(BaseModel):
     address_name: Annotated[str, Field(max_length=100)]
     address: Annotated[str, Field(max_length=255)]
     number: Annotated[str, Field(max_length=10)]
-    complement: Optional[Annotated[str, Field(max_length=255)]]
+    complement: Optional[Annotated[str, Field(max_length=255)]] = None
     district: Annotated[str, Field(max_length=100)]
     zip_code: Annotated[str, Field(max_length=10)]
     city: Annotated[str, Field(max_length=100)]

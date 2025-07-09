@@ -57,3 +57,10 @@ def phone_to_string(phone):
 
 def phone_to_number(phone):
     return phone.replace("(","").replace(")","").replace("-","").replace(" ","")
+
+def validation_error_detail_msg(error_list):
+    try:
+        detail = (error_list[0].get('msg', 'Unknown error') if error_list else 'Unknow error')
+        return detail
+    except IndexError:
+        return 'No error list'
