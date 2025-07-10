@@ -1,7 +1,7 @@
 import re
 from pydantic import BaseModel, Field, field_validator
 from typing import Annotated, Optional
-from apps.utils.exceptions import InvalidZipCodeFormat
+from apps.utils.exceptions import InvalidZipCodeFormat, InvalidStateFormat
 
 class AddressSchema(BaseModel):
     address_name: Annotated[str, Field(max_length=100)]
@@ -17,4 +17,10 @@ class AddressSchema(BaseModel):
     def validate_zip_code(cls, v):
         if not re.match(r"^\d{5}-\d{3}$", v):
             raise InvalidZipCodeFormat
+        return v
+    
+    @field_validator('state')
+    def validate_state_format(cls, v):
+        if not re.match(r"^[A-Z]{2}$", v):
+            raise InvalidStateFormat
         return v

@@ -5,7 +5,6 @@ from rest_framework.exceptions import APIException
 
 from apps.utils.exceptions import NotFoundProfile
 from apps.users.models import Profile, Address
-from apps.users.models.users import GroupPermissions, User, UserGroups
 from apps.users.selectors import get_user
 
 class Base(APIView):

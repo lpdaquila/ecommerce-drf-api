@@ -4,15 +4,15 @@ from typing import Annotated
 from apps.utils.exceptions import InvalidPasswordFormat
 
 class UserSignupSchema(BaseModel):
-    name: Annotated[str, Field(max_length=100)]
+    name: Annotated[str, Field(min_length=3, max_length=100)]
     email: EmailStr
-    password: Annotated[str, Field(min_length=8)]
+    password: str
     
-    # @field_validator('password')
-    # def validate_password(cls, v):
-    #     if not re.match(r"^.{8,}$", v):
-    #         raise InvalidPasswordFormat
-    #     return v
+    @field_validator('password')
+    def validate_password(cls, v):
+        if not re.match(r"^.{8,}$", v):
+            raise InvalidPasswordFormat
+        return v
     
 class UserAuthSchema(BaseModel):
     email: str

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.users.models import Profile, Address
+from apps.users.models import Address, Profile
 from apps.utils.data_parser import document_to_string, phone_to_string
         
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -46,7 +46,7 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
         fields = (
             'id',
-            'name',
+            'address_name',
             'address',
             'number',
             'complement',

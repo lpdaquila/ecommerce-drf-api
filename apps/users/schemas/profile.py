@@ -1,5 +1,3 @@
-import re
-
 from apps.utils.data_parser import phone_to_number, document_to_number, validate_cpf
 from apps.utils.exceptions import InvalidPhone, InvalidDocument
 
@@ -10,22 +8,28 @@ from datetime import datetime
 class ProfileSchema(BaseModel):
     name: Annotated[str, Field(min_length=3, max_length=100)]
     email: EmailStr
-    phone: Optional[Annotated[str, Field(min_length=10, max_length=15)]] = None
-    document: Optional[Annotated[str, Field(min_length=11, max_length=14)]] = None 
+    phone: Optional[str] = None
+    document: Optional[str] = None 
     
     @field_validator('phone')
     def validate_phone_format(cls, v):
-        numeric = phone_to_number(v)
-        if len(numeric) < 10 or len(numeric) > 15:
-            raise InvalidPhone
-        return numeric
+        if v:
+            numeric = phone_to_number(v)
+            if len(numeric) < 10 or len(numeric) > 15:
+                raise InvalidPhone
+            return numeric
+        else:
+            return None
     
     @field_validator('document')
     def validate_document_format(cls, v):
-        parsed = document_to_number(v)
-        if len(parsed) < 11 or len(parsed) > 15 or not validate_cpf(parsed):
-            raise InvalidDocument
-        return parsed
+        if v:
+            parsed = document_to_number(v)
+            if len(parsed) < 11 or len(parsed) > 15 or not validate_cpf(parsed):
+                raise InvalidDocument
+            return parsed
+        else:
+            return None
     
     class Config:
         orm_mode = True

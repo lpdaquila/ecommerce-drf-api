@@ -31,7 +31,7 @@ class InvalidPhone(APIException):
     
 class InvalidDocument(APIException):
     status_code = 400
-    default_detail = "Invalid document format"
+    default_detail = "Invalid document"
     
 class InvalidPasswordFormat(APIException):
     status_code = 400
@@ -40,5 +40,9 @@ class InvalidPasswordFormat(APIException):
 class InvalidZipCodeFormat(APIException):
     status_code = 400
     default_detail = "Invalid zip code format, Use XXXXX-XXX pattern"
+    
+class InvalidStateFormat(APIException):
+    status_code = 400
+    default_detail = "Invalid State format, use 2 upper case letters only"
     
     

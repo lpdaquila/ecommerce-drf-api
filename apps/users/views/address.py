@@ -18,7 +18,7 @@ class AddressView(Base):
         
         addresses = Address.objects.filter(profile_id=profile.pk).all() # type: ignore
         
-        serializer = AddressSerializer(addresses)
+        serializer = AddressSerializer(addresses, many=True)
         
         return Response({
             "addresses": serializer.data

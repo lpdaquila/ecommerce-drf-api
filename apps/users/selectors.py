@@ -1,5 +1,4 @@
-from apps.users.models.users import User
-
+from apps.users.models import User
 
 def get_user(email:str) -> User | None: 
     """
