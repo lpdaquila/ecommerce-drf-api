@@ -6,7 +6,7 @@ class RequiredFields(APIException):
     default_code = 'error_required_field'
     
 class EmailAlreadyInUse(APIException):
-    status_code = 400
+    status_code = 409
     default_detail = 'Email already in use'
     default_code = 'error_email_already_in_use'
     
@@ -21,7 +21,7 @@ class UserInactivated(APIException):
     default_code = 'error_user_inactivated'
     
 class DocumentAlreadyRegistered(APIException):
-    status_code = 400
+    status_code = 409
     default_detail = "Document already registered"
     default_code = 'error_document_already_registered'
     
@@ -30,7 +30,7 @@ class InvalidPhone(APIException):
     default_detail = "Invalid phone format"
     
 class InvalidDocument(APIException):
-    status_code = 400
+    status_code = 422
     default_detail = "Invalid document"
     
 class InvalidPasswordFormat(APIException):
@@ -38,11 +38,11 @@ class InvalidPasswordFormat(APIException):
     default_detail = "Invalid password format"
     
 class InvalidZipCodeFormat(APIException):
-    status_code = 400
+    status_code = 422
     default_detail = "Invalid zip code format, Use XXXXX-XXX pattern"
     
 class InvalidStateFormat(APIException):
-    status_code = 400
+    status_code = 422
     default_detail = "Invalid State format, use 2 upper case letters only"
     
     

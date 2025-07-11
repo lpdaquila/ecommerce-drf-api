@@ -91,15 +91,6 @@ class Authentication:
         Returns:
             :User (class models): Returns an object of type 'User' from models class
         """
-        
-        if not name or name == '':
-            raise APIException('Name cannot be null')
-        
-        if not email or email == '':
-            raise APIException('Email cannot be empty')
-        
-        if not password or password == '':
-            raise APIException('Password cannot be empty')
 
         if get_user(email): # Checks if the email already exists
             raise EmailAlreadyInUse

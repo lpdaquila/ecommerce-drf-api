@@ -34,7 +34,7 @@ class CreateAccountView(Base):
             data = UserSignupSchema(**request.data)
         except ValidationError as e:
             detail = validation_error_detail_msg(e.errors())
-            raise APIException(detail=detail)
+            return Response({"detail": detail}, status=400)
         
         user = Authentication.create_account(self, name=data.name, email=data.email, password=data.password) # type: ignore
         

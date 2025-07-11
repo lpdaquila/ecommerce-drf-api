@@ -29,7 +29,7 @@ class AddressView(Base):
             validated_data = AddressSchema(**request.data)
         except ValidationError as e:
             detail = validation_error_detail_msg(e.errors())
-            raise APIException(detail=detail)
+            return Response({"detail": detail}, status=400)
         
         profile = self.get_profile(request.user.id)
         
