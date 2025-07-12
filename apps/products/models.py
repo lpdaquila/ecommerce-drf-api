@@ -25,7 +25,7 @@ class ProductVariant(models.Model):
     options = models.ManyToManyField('VariationOption')
     
     def __str__(self) -> str:
-        return self.product.name
+        return f"{self.sku} - {self.product.name}"
     
 class VariationOption(models.Model):
     name = models.CharField(max_length=100)

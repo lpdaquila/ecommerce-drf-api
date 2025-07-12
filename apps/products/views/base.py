@@ -1,12 +1,15 @@
+from django.db import connection
+
 from rest_framework.views import APIView
-from apps.products.models import Product, ProductVariant, VariationOption, Price
+from rest_framework.response import Response
+
+from apps.products.models import ProductVariant
+from apps.utils.load_query import load
 
 class Base(APIView):
-    def get_product(self, slug: str):
-        query = """
-        SELECT p.id, p.name, pr.price 
-FROM products_product p
-JOIN products_productvariant v ON v.product_id = p.id
-JOIN products_price pr ON pr.product_var_id = v.id
-WHERE p.slug = %s
-        """
+    def get_products(self):
+        query = load('apps/products/sql/get_products.sql')
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            columns = [col[0] for col in cursor.description] # type: ignore
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
