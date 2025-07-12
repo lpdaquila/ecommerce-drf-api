@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     
     # Project Apps
     # 'apps.orders',
-    # 'apps.products',
+    'apps.stock',
+    'apps.products',
     'apps.users',
 ]
 
