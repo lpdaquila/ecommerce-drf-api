@@ -14,6 +14,13 @@ class Base(APIView):
             columns = [col[0] for col in cursor.description] # type: ignore
             return [dict(zip(columns, row)) for row in cursor.fetchall()]
         
+    def get_product_variant(self, product_id):
+        query = load('apps/products/sql/get_product_variant.sql')
+        with connection.cursor() as cursor:
+            cursor.execute(query, [product_id])
+            columns = [col[0] for col in cursor.description] # type: ignore
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
     def get_a_product(self, slug):
         product = Product.objects.filter(slug=slug)\
             .values(
@@ -28,10 +35,3 @@ class Base(APIView):
             return Response({"detail": "Product not found"}, status=404)
             
         return product
-    
-    def get_product_variant(self, product_id):
-        query = load('apps/products/sql/get_product_variant.sql')
-        with connection.cursor() as cursor:
-            cursor.execute(query, [product_id])
-            columns = [col[0] for col in cursor.description] # type: ignore
-            return [dict(zip(columns, row)) for row in cursor.fetchall()]

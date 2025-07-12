@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.products.models import Product, ProductVariant
+from apps.products.models import Product
 
 class ProductsSerializer(serializers.ModelSerializer):
     sale_price = serializers.DecimalField(

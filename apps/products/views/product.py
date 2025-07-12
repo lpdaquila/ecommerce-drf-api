@@ -1,7 +1,6 @@
 from apps.products.views.base import Base
 from apps.products.serializers import (
     ProductsSerializer, ProductDetailSerializer,
-    ProductVariantSerializer
     )
 
 

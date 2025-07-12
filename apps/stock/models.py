@@ -1,8 +1,8 @@
 from django.db import models
-from apps.products.models import ProductVariant
+from apps.products.models import Variation
 
 class Inventory(models.Model):
-    product_var = models.OneToOneField(ProductVariant, on_delete=models.CASCADE)
+    product_var = models.OneToOneField(Variation, on_delete=models.CASCADE)
     # stock_type = models.ForeignKey('StockType', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
     # max_quantity = models.PositiveIntegerField()

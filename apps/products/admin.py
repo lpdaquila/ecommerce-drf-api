@@ -1,15 +1,15 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from .models import Product, ProductVariant, VariationOption, Price, PriceType
+from .models import Product, Variation, SubVariation, Price, PriceType
 
 class ProductVarInline(admin.TabularInline):
-    model = ProductVariant
+    model = Variation
     extra = 1
     autocomplete_fields = ['options']
     
-@admin.register(VariationOption)
-class VariationOptionAdmin(admin.ModelAdmin):
+@admin.register(SubVariation)
+class SubVariationAdmin(admin.ModelAdmin):
     search_fields = ['name']
     
 class ProductAdmin(admin.ModelAdmin):
