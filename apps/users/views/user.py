@@ -1,7 +1,6 @@
 from apps.users.views.base import Base
 from apps.users.models import User
 from apps.users.serializers import UserProfileSerializer
-from apps.utils import load_query
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -29,14 +28,10 @@ class GetUserView(Base):
             ("user": serializer.data, "perm": List[str])
             containing the user data and a list of permissions
         """
-        query = load_query.load('apps/users/sql/get_user.sql')
-        try:
-            user = User.objects.raw(query, [request.user.id])[0]
-        except IndexError:
-            APIException('User does not exists or is inactivated!')
-            return
         
-        profile = self.get_user_profile(user.pk)
+        user = self.get_user(request.user.id)
+        
+        profile = self.get_user_profile(user.id) # type: ignore
             
         serializer = UserProfileSerializer(profile)
         

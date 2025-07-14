@@ -1,25 +1,19 @@
-from django.db import connection
-
 from rest_framework.views import APIView
-from rest_framework.response import Response
 
 from apps.products.models import Product
-from apps.utils.load_query import load
+from apps.utils.query_handler import load_query, use_cursor
+from apps.utils.exceptions import ProductNotFound
 
 class Base(APIView):
     def get_products(self):
-        query = load('apps/products/sql/get_products.sql')
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            columns = [col[0] for col in cursor.description] # type: ignore
-            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+        query = load_query('apps/products/sql/get_products.sql')
+        result = use_cursor(query)
+        return result
         
     def get_product_variant(self, product_id):
-        query = load('apps/products/sql/get_product_variant.sql')
-        with connection.cursor() as cursor:
-            cursor.execute(query, [product_id])
-            columns = [col[0] for col in cursor.description] # type: ignore
-            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+        query = load_query('apps/products/sql/get_product_variant.sql')
+        result = use_cursor(query, [product_id])
+        return result
         
     def get_a_product(self, slug):
         product = Product.objects.filter(slug=slug)\
@@ -32,6 +26,6 @@ class Base(APIView):
             ).first()
             
         if not product:
-            return Response({"detail": "Product not found"}, status=404)
+            raise ProductNotFound
             
         return product

@@ -6,7 +6,22 @@ from django.contrib.auth.hashers import check_password, make_password
 from apps.utils.exceptions import EmailAlreadyInUse
 from apps.utils import generate_expire_time
 from apps.users.models import User, Profile
-from apps.users.selectors import get_user
+
+def get_user(email:str) -> User | None: 
+    """
+    Function that executes the SQL query, and
+    returns a 'User' object from the data models or 'None'.
+    
+    Args:
+        :email (str): User email to be consulted.
+    
+    Returns:
+        :User (class models): Returns an object of type 'User' from the
+    """
+        
+    user = User.objects.filter(email=email).first()
+    
+    return user 
 
 def create_user(name: str, email: str, password: str) -> User:
     password_hashed = make_password(password)

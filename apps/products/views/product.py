@@ -3,7 +3,6 @@ from apps.products.serializers import (
     ProductsSerializer, ProductDetailSerializer,
     )
 
-
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 

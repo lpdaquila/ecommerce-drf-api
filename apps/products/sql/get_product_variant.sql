@@ -9,10 +9,10 @@ FROM products_variation v
 JOIN stock_inventory s on s.product_var_id = v.id
 
 -- Get Price
-LEFT JOIN products_price pr_sale ON 
-pr_sale.product_var_id = v.id AND pr_sale.price_type_id = 1 -- price_type 1 = Sale
-LEFT JOIN products_price pr_promo ON 
-pr_promo.product_var_id = v.id AND pr_promo.price_type_id = 2 -- price_type 2 = Promo
+LEFT JOIN products_price pr_sale ON -- price_type 1 = Sale
+pr_sale.product_var_id = v.id AND pr_sale.price_type_id = 1 
+LEFT JOIN products_price pr_promo ON -- price_type 2 = Promo
+pr_promo.product_var_id = v.id AND pr_promo.price_type_id = 2 
 
 -- Get Variations
 LEFT JOIN products_variation_options pvo ON pvo.variation_id = v.id

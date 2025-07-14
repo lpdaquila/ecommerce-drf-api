@@ -45,4 +45,8 @@ class InvalidStateFormat(APIException):
     status_code = 422
     default_detail = "Invalid State format, use 2 upper case letters only"
     
+class ProductNotFound(APIException):
+    status_code = 404
+    default_detail = "Product not found"
+    
     
