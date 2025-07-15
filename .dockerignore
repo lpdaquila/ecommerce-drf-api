@@ -34,3 +34,5 @@ htmlcov/
 *.pyc
 *.pyo
 *.pyd
+
+scripts/

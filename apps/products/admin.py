@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from .models import Product, Variation, SubVariation, Price, PriceType
+from .models import Product, Variation, SubVariation, Price, PriceType, SubVariationType, Category
 
 class ProductVarInline(admin.TabularInline):
     model = Variation
@@ -23,6 +23,14 @@ class PriceTypeAdmin(admin.ModelAdmin):
     
 class PriceAdmin(admin.ModelAdmin):
     list_display = ('price', 'currency')
+    
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'parent', 'slug')
+    
+@admin.register(SubVariationType)
+class SubVariationTypeAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Price, PriceAdmin)
