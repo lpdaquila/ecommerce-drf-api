@@ -17,7 +17,7 @@ JOIN (
     WHERE pr.price_type_id = 1 AND s.quantity > 0
 
     GROUP BY v_inner.product_id
-    HAVING MIN(pr.price)
+    -- HAVING MIN(pr.price)
 ) AS subq ON subq.product_id = p.id
 
 LEFT JOIN products_price pr_sale ON -- price_type 1 = Sale

@@ -1,12 +1,12 @@
 from rest_framework.views import APIView
 
-from apps.products.models import Product
+from apps.products.models import Product, Category
 from apps.utils.query_handler import load_query, use_cursor
 from apps.utils.exceptions import ProductNotFound
 
 class Base(APIView):
     def get_products(self):
-        query = load_query('apps/products/sql/get_products.sql')
+        query = load_query('apps/products/sql/get_products_v2.sql')
         result = use_cursor(query)
         return result
         
@@ -14,6 +14,14 @@ class Base(APIView):
         query = load_query('apps/products/sql/get_product_variant.sql')
         result = use_cursor(query, [product_id])
         return result
+    
+    def get_product_categories(self, product_id):
+        product = Product.objects.get(id=product_id)
+        
+        category_path = product.category.get_full_path() # type: ignore
+        
+        return category_path
+        
         
     def get_a_product(self, slug):
         product = Product.objects.filter(slug=slug)\

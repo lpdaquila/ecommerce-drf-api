@@ -1,0 +1,25 @@
+services:
+  db:
+    container_name: ecommerce_db
+    user: "1001"
+    image: bitnami/postgresql:17
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes: 
+      - /home/lucasdaquila/data/ecommerce-db:/bitnami/postgresql
+    env_file:
+      - .env.local
+    
+  app:
+    container_name: ecommerce_app
+    image: ecommerce-api:2.4.1-slim
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.local
+
+    

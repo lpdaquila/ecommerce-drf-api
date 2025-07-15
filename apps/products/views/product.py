@@ -23,7 +23,7 @@ class ProductDetail(Base):
         
         variants = self.get_product_variant(product.get('id')) # type: ignore
         
-        product['variants'] = variants # type: ignore
+        product['variants'] = variants 
         
         serializer = ProductDetailSerializer(product)
         

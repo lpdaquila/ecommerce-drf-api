@@ -3,21 +3,22 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    --mount=type=bind,source=.python-version,target=.python-version \
-    uv sync --locked --no-install-project --no-editable
+RUN apt-get update && apt-get install -y libpq-dev gcc build-essential
 
-ADD . /app
+COPY uv.lock pyproject.toml .python-version ./
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked --no-editable
+    uv sync --locked --no-install-project 
+
+ADD . . 
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked
     
 FROM debian:stable-slim
     
 RUN apt-get update && \
-    apt-get install -y ca-certificates && \
+    apt-get install -y ca-certificates libpq-dev && \
     rm -rf /var/lib/apt/lists/*
     
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
@@ -34,4 +35,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
 
-CMD ["python", "gunicorn", "--workers=3", "--bind=0.0.0.0:8000", "core.wsgi"]
+CMD ["gunicorn", "--workers=3", "--bind=0.0.0.0:8000", "core.wsgi"]

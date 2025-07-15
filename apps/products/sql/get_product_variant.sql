@@ -1,7 +1,6 @@
 SELECT
 v.id AS variant_id,
 v.sku,
-GROUP_CONCAT(sv.name, ', ') AS options,
 pr_sale.price AS sale_price,
 pr_promo.price AS promo_price
 
