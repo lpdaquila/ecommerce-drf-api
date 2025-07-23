@@ -7,12 +7,12 @@ from apps.utils.exceptions import ProductNotFound
 class Base(APIView):
     def get_products(self):
         query = load_query('apps/products/sql/get_products_v2.sql')
-        result = use_cursor(query)
+        result = use_cursor(query, many=True)
         return result
         
-    def get_product_variant(self, product_id):
-        query = load_query('apps/products/sql/get_product_variant.sql')
-        result = use_cursor(query, [product_id])
+    def get_product_detail(self, slug):
+        query = load_query('apps/products/sql/get_product_variant_v2.sql')
+        result = use_cursor(query, [slug])
         return result
     
     def get_product_categories(self, product_id):

@@ -1,4 +1,4 @@
-import uuid
+from uuid import uuid4
 from datetime import timedelta
 from django.utils import timezone
 from django.db import models
@@ -22,6 +22,8 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
+
+#TODO: add UUID identifiers to User, Profile, Address, etc and stop showing the PKs on frontend
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
@@ -90,7 +92,7 @@ class AnonymousProfile(models.Model):
         return timezone.now() < self.expires_at if self.expires_at else None
     
     def renew_token(self, hours: int = 48):
-        self.public_id = uuid.uuid4()
+        self.public_id = uuid4()
         self.expires_at = timezone.now() + timedelta(hours=hours)
         self.save()
         
@@ -110,6 +112,7 @@ class Address(models.Model):
             state - Char
     """
         
+    address_id = models.CharField(default=uuid4().hex[:12], unique=True, editable=False, null=True, blank=True)
     address_name = models.CharField(max_length=100)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     address = models.CharField(max_length=255)

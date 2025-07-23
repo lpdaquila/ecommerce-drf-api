@@ -15,7 +15,7 @@ class ProfileSchema(BaseModel):
     def validate_phone_format(cls, v):
         if v:
             numeric = phone_to_number(v)
-            if len(numeric) < 10 or len(numeric) > 15:
+            if len(numeric) < 10 or len(numeric) > 15 or not numeric.isdigit():
                 raise InvalidPhone
             return numeric
         else:

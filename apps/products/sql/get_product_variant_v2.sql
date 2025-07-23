@@ -40,9 +40,8 @@ SELECT
     p.short_description,
     p.long_description,
     (
-
     SELECT json_agg(json_build_object(
-        'id', v.id,
+        'variant_id', v.id,
         'sku', v.sku,
         'sale_price', v.sale_price,
         'promo_price', v.promo_price,

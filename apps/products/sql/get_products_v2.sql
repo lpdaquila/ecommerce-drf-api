@@ -37,7 +37,7 @@ SELECT
     p.name, 
     pr_sale.price AS sale_price,
     pr_promo.price AS promo_price,
-    json_object_agg(svc.type_name, svc.vals)  AS sub_vars
+    json_object_agg(svc.type_name, svc.vals) AS sub_vars
 
 FROM products_product p
 

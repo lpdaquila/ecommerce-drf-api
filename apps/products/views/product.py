@@ -19,11 +19,7 @@ class ProductDetail(Base):
     permission_classes = [AllowAny]
     
     def get(self, _request, slug):
-        product = self.get_a_product(slug)
-        
-        variants = self.get_product_variant(product.get('id')) # type: ignore
-        
-        product['variants'] = variants 
+        product = self.get_product_detail(slug)
         
         serializer = ProductDetailSerializer(product)
         

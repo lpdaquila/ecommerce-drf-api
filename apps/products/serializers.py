@@ -32,20 +32,19 @@ class ProductsSerializer(serializers.ModelSerializer):
 class ProductVariantSerializer(serializers.Serializer):
     variant_id = serializers.IntegerField()
     sku = serializers.CharField()
-    # options = serializers.CharField()
     sale_price = serializers.DecimalField(
         max_digits=10, 
         decimal_places=2, 
         allow_null=True, 
         required=False
     )
-    
     promo_price = serializers.DecimalField(
         max_digits=10, 
         decimal_places=2, 
         allow_null=True, 
         required=False
     )
+    sub_vars = serializers.JSONField()
         
 class ProductDetailSerializer(serializers.ModelSerializer):
     variants = ProductVariantSerializer(many=True)
